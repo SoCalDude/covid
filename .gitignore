@@ -141,3 +141,4 @@ cython_debug/
 # miscellaneous files by SoCalDude
 *.bak
 ~$*
+*.orig
