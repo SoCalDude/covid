@@ -138,6 +138,17 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Visual Studio Code Patch #
+# Ignore all local history of files
+**/.history
+
 # miscellaneous files by SoCalDude
 *.bak
 ~$*
