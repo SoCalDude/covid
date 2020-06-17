@@ -31,4 +31,4 @@ LOCAL_FILE: str = r"data\covid19-oc.csv"
 TARGET_FIPS_ID: float = 6059
 UNUSED_COLUMNS: list = ["county", "state", "fips"]
 TICK_REDUCTION_FACTOR: float = 0.955
-CHART_FILENAME = r".\doc\covid-19-new-cases-oc-{}.png"
+CHART_FILENAME = r".\chart\covid-19-new-cases-{}.png"
