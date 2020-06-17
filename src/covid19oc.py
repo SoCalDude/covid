@@ -61,7 +61,9 @@ class Covid19Oc:
             # make a copy of the old file and create the new one
             if retVal and wasRemoteCallSuccessful:
                 try:
-                    shutil.copy(cfg.LOCAL_FILE, cfg.LOCAL_FILE + ".prev")
+                    if os.path.exists(cfg.LOCAL_FILE):
+                        shutil.copy(cfg.LOCAL_FILE, cfg.LOCAL_FILE + ".prev")
+                        
                     with open(cfg.LOCAL_FILE, "w") as f:
                         f.write(csv.text)
                 except Exception as ex:

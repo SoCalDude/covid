@@ -27,7 +27,7 @@ class ChartFocus(Enum):
 USE_SERVER_DATA: bool = True
 SAVE_CHART_IMAGE: bool = True
 DATA_URL: str = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
-LOCAL_FILE: str = r"data\covid19-oc.csv"
+LOCAL_FILE: str = r"data\covid19.csv"
 TARGET_FIPS_ID: float = 6059
 UNUSED_COLUMNS: list = ["county", "state", "fips"]
 TICK_REDUCTION_FACTOR: float = 0.955
