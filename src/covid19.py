@@ -165,10 +165,11 @@ class Covid19:
         )
 
         plt.xticks(fontsize=7, rotation=45, ha="right")
-        plt.grid(axis="y")
+        plt.grid(axis="x", which="major", color="#E5E5E5", linestyle="dotted")
+        plt.grid(axis="y", which="major", color="#E5E5E5", linestyle="solid")
         plt.legend()
 
-        # save chart is requested
+        # if saving the chart is requested
         if saveChart:
             plt.savefig(cfg.CHART_FILENAME.format(self.getFilenameTimestamp()), bbox_inches="tight")
 

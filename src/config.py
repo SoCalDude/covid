@@ -28,5 +28,5 @@ DATA_URL: str = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/
 LOCAL_FILE: str = r"data\covid19.csv"
 TARGET_FIPS_ID: float = 6059
 UNUSED_COLUMNS: list = ["county", "state", "fips"]
-TICK_REDUCTION_FACTOR: float = 0.955
+TICK_REDUCTION_FACTOR: float = 0.98
 CHART_FILENAME = r".\chart\covid-19-new-cases-{}.png"
