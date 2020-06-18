@@ -51,7 +51,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnOK">
+   <widget class="QPushButton" name="btnStart">
     <property name="geometry">
      <rect>
       <x>200</x>
@@ -61,10 +61,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>OK</string>
+     <string>Start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnCancel">
+   <widget class="QPushButton" name="btnClose">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -74,10 +74,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Cancel</string>
+     <string>Close</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="grpDataSource">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -89,7 +89,7 @@
     <property name="title">
      <string>Data Source</string>
     </property>
-    <widget class="QRadioButton" name="radServer">
+    <widget class="QRadioButton" name="radServerData">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -105,7 +105,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_2">
+    <widget class="QRadioButton" name="radLocalData">
      <property name="geometry">
       <rect>
        <x>20</x>

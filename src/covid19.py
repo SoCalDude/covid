@@ -28,15 +28,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setFixedSize(374, 195)
 
         # custom event handling (assigning slots)
-        self.btnOK.clicked.connect(launchCharting)
-        self.btnCancel.clicked.connect(self.exitWindow)
+        self.btnStart.clicked.connect(self.handleStartButton)
+        self.btnClose.clicked.connect(self.handleCloseButton)
 
+    def handleStartButton(self) -> None:
+        launchOptions = {"isFromServer": self.radServerData.isChecked(), "saveChart": self.chkSavePlotImage.isChecked()}
+        launchCharting(launchOptions)
 
-    def exitWindow(self):
+    def handleCloseButton(self):
         self.close()
 
 
-class Covid19Oc:
+class Covid19:
     def __init__(self):
         pass
 
@@ -63,7 +66,7 @@ class Covid19Oc:
                 try:
                     if os.path.exists(cfg.LOCAL_FILE):
                         shutil.copy(cfg.LOCAL_FILE, cfg.LOCAL_FILE + ".prev")
-                        
+
                     with open(cfg.LOCAL_FILE, "w") as f:
                         f.write(csv.text)
                 except Exception as ex:
@@ -122,7 +125,7 @@ class Covid19Oc:
     def getFilenameTimestamp(self) -> str:
         return datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
 
-    def showChart(self, df: pd.DataFrame, whichMetric: cfg.ChartFocus) -> None:
+    def showChart(self, df: pd.DataFrame, whichMetric: cfg.ChartFocus, saveChart: bool) -> None:
         yAxis: str = ""
         yLabel: str = ""
 
@@ -155,20 +158,21 @@ class Covid19Oc:
         plt.grid(axis="y")
         plt.legend()
 
-        # save (possibly) and display the graph
-        if cfg.SAVE_CHART_IMAGE:
+        # save chart is requested
+        if saveChart:
             plt.savefig(cfg.CHART_FILENAME.format(self.getFilenameTimestamp()), bbox_inches="tight")
 
+        # display chart
         plt.show()
 
 
-def launchCharting() -> None:
-    cvd = Covid19Oc()
+def launchCharting(chartingOptions: dict) -> None:
+    cvd = Covid19()
+    useServerData = chartingOptions["isFromServer"]
 
-    # toggle cfg.USE_SERVER_DATA if you want fresh data or not
-    isFromServer: bool = cfg.USE_SERVER_DATA
-    print("Retrieving data from server..." if isFromServer else "Retrieving from local file...")
-    if (not cvd.getLatestData(isFromServer)) and (not os.path.isfile(cfg.LOCAL_FILE)):
+    # this was chosen by the user in the GUI if they want fresh data or not
+    print("Retrieving data from server..." if useServerData else "Retrieving from local file...")
+    if (not cvd.getLatestData(useServerData)) and (not os.path.isfile(cfg.LOCAL_FILE)):
         print("Unable to download latest data nor able to use local data.")
     else:
         print("Filtering data...")
@@ -182,7 +186,7 @@ def launchCharting() -> None:
             pd.set_option("display.max_rows", None)
             print(dfOC.tail())
 
-            cvd.showChart(dfOC, cfg.ChartFocus.NEW_CASES)
+            cvd.showChart(dfOC, cfg.ChartFocus.NEW_CASES, chartingOptions["saveChart"])
 
 
 def main() -> None:

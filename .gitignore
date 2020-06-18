@@ -153,8 +153,12 @@ cython_debug/
 *.bak
 ~$*
 *.orig
+personal/
 
 # covid project specific
+chart/
 data/*
 !data/.gitkeep
-chart/
+doc/*
+!doc/.gitkeep
+
