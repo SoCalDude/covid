@@ -6,12 +6,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import requests
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-
 import sys
+import traceback
 
 sys.path.append(".")
 import src.config as cfg
+
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
 # import mainFormConfig as formCfg
 from src.mainForm import Ui_MainWindow
@@ -26,14 +27,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # custom property settings
         self.setFixedSize(374, 195)
+        self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
 
         # custom event handling (assigning slots)
         self.btnStart.clicked.connect(self.handleStartButton)
         self.btnClose.clicked.connect(self.handleCloseButton)
 
     def handleStartButton(self) -> None:
-        launchOptions = {"isFromServer": self.radServerData.isChecked(), "saveChart": self.chkSavePlotImage.isChecked()}
-        launchCharting(launchOptions)
+        try:
+            self.btnStart.setEnabled(False)
+            self.btnClose.setEnabled(False)
+            launchOptions = {"isFromServer": self.radServerData.isChecked(), "saveChart": self.chkSavePlotImage.isChecked()}
+            launchCharting(launchOptions)
+        except:
+            print(f"An error occurred: {sys.exc_info()[0]}; {sys.exc_info()[1] if len(sys.exc_info()) > 1 else ''}\n{traceback.format_exc()}")
+        finally:
+            self.btnStart.setEnabled(True)
+            self.btnClose.setEnabled(True)
 
     def handleCloseButton(self):
         self.close()
