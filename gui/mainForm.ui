@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Save plot image</string>
+     <string>Save chart image</string>
     </property>
     <property name="checked">
      <bool>true</bool>

@@ -156,7 +156,10 @@ cython_debug/
 personal/
 
 # covid project specific
-chart/
+chart/*
+!chart/screenshot-01.png
+!chart/screenshot-02.png
+!chart/screenshot-03.png
 data/*
 !data/.gitkeep
 doc/*

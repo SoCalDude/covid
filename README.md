@@ -4,6 +4,8 @@
 ---  
 #### COVID-19 Charting for County
 
+![COVID-19 New Cases Screenshot](https://i.imgur.com/z0FOU7L.jpg)
+
 This is the COVID-19 charting application for displaying a chart of daily new COVID-19 cases (or daily COVID-19 deaths) for a particular county.
 
 Currently, the data only shows for Orange County, California. The ability to choose any county from any state is forthcoming (in [<ins>Issue #4</ins>](https://github.com/SoCalDude/covid/issues/4))
@@ -28,6 +30,8 @@ For the time being, if you wish to show a different county, please refer to the 
 		python -m pip install -r requirements.txt
 2. Run the main Python script from the _src_ folder:
     <br><pre>covid19oc.py</pre>
+<br><br>
+![COVID-19 Main Window Screenshot](https://i.imgur.com/GsYZhaI.jpg)
 <br><br>
 
 **Manual County Selection**
