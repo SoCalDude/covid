@@ -6,7 +6,7 @@
 
 This is the COVID-19 charting application for displaying a chart of daily new COVID-19 cases (or daily COVID-19 deaths) for a particular county.
 
-Currently, the data only shows for Orange County, California. The ability to choose any county from any state is forthcoming.
+Currently, the data only shows for Orange County, California. The ability to choose any county from any state is forthcoming (in [<ins>Issue #4</ins>](https://github.com/SoCalDude/covid/issues/4))
 
 For the time being, if you wish to show a different county, please refer to the **Manual County Selection** section below. 
 
