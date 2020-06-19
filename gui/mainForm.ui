@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>195</height>
+    <width>448</width>
+    <height>227</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QCheckBox" name="chkSavePlotImage">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>110</y>
+      <x>40</x>
+      <y>160</y>
       <width>125</width>
       <height>20</height>
      </rect>
@@ -35,7 +35,7 @@
      <rect>
       <x>0</x>
       <y>10</y>
-      <width>371</width>
+      <width>441</width>
       <height>31</height>
      </rect>
     </property>
@@ -54,8 +54,8 @@
    <widget class="QPushButton" name="btnStart">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>160</y>
+      <x>270</x>
+      <y>190</y>
       <width>75</width>
       <height>24</height>
      </rect>
@@ -67,8 +67,8 @@
    <widget class="QPushButton" name="btnClose">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>160</y>
+      <x>350</x>
+      <y>190</y>
       <width>75</width>
       <height>24</height>
      </rect>
@@ -80,7 +80,7 @@
    <widget class="QGroupBox" name="grpDataSource">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>250</x>
       <y>60</y>
       <width>181</width>
       <height>81</height>
@@ -116,6 +116,48 @@
      </property>
      <property name="text">
       <string>via local previous data</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>60</y>
+      <width>181</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>GroupBox</string>
+    </property>
+    <widget class="QRadioButton" name="radNewCases">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>151</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Daily new cases</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radNewDeaths">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>151</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Daily new deaths</string>
      </property>
     </widget>
    </widget>
