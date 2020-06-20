@@ -50,6 +50,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # custom property settings
+        self.setWindowIcon(QtGui.QIcon(r"images/covid-image-120x123.png"))
+        _translate = QtCore.QCoreApplication.translate
+        self.lblVersion.setText(_translate("MainWindow", f"v{cfg.APP_VERSION}"))
         self.setFixedSize(448, 227)
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
 

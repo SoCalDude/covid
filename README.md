@@ -1,10 +1,11 @@
-# covid
+![covid Charting Project logo](https://github.com/SoCalDude/covid/blob/master/images/covid-image-120x123.png)
+# covid Charting Project
 <div style="text-align: right;font-size: small">SoCalDude</div>  
 
 ---  
 #### COVID-19 Charting for County
 
-![COVID-19 New Cases Screenshot](https://github.com/SoCalDude/covid/blob/develop/chart/screenshot-01.png)
+![COVID-19 New Cases Screenshot](https://github.com/SoCalDude/covid/blob/master/images/screenshot-01.png)
 
 This is the COVID-19 charting application for displaying a chart of daily new COVID-19 cases (or daily COVID-19 deaths) for a particular county.
 
@@ -31,7 +32,7 @@ For the time being, if you wish to show a different county, please refer to the 
 2. Run the main Python script from the _src_ folder:
     <br><pre>covid19oc.py</pre>
 <br><br>
-![COVID-19 Main Window Screenshot](https://github.com/SoCalDude/covid/blob/develop/chart/screenshot-03.png)
+![COVID-19 Main Window Screenshot](https://github.com/SoCalDude/covid/blob/master/images/screenshot-03.png)
 <br><br>
 
 **Manual County Selection**

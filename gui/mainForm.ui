@@ -33,9 +33,9 @@
    <widget class="QLabel" name="lblTitle">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>-1</x>
       <y>10</y>
-      <width>441</width>
+      <width>450</width>
       <height>31</height>
      </rect>
     </property>
@@ -160,6 +160,19 @@
       <string>Daily new deaths</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QLabel" name="lblVersion">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>208</y>
+      <width>211</width>
+      <height>10</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>v0.10</string>
+    </property>
    </widget>
   </widget>
  </widget>

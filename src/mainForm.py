@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         self.chkSavePlotImage.setChecked(True)
         self.chkSavePlotImage.setObjectName("chkSavePlotImage")
         self.lblTitle = QtWidgets.QLabel(self.centralwidget)
-        self.lblTitle.setGeometry(QtCore.QRect(0, 10, 441, 31))
+        self.lblTitle.setGeometry(QtCore.QRect(-1, 10, 450, 31))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.lblTitle.setFont(font)
@@ -53,6 +53,9 @@ class Ui_MainWindow(object):
         self.radNewDeaths = QtWidgets.QRadioButton(self.groupBox)
         self.radNewDeaths.setGeometry(QtCore.QRect(20, 50, 151, 20))
         self.radNewDeaths.setObjectName("radNewDeaths")
+        self.lblVersion = QtWidgets.QLabel(self.centralwidget)
+        self.lblVersion.setGeometry(QtCore.QRect(20, 208, 211, 10))
+        self.lblVersion.setObjectName("lblVersion")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -61,7 +64,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Orange Co. COVID-19 Charting"))
-        self.chkSavePlotImage.setText(_translate("MainWindow", "Save graph image"))
+        self.chkSavePlotImage.setText(_translate("MainWindow", "Save chart image"))
         self.lblTitle.setText(_translate("MainWindow", "County COVID-19 Charting"))
         self.btnStart.setText(_translate("MainWindow", "Start"))
         self.btnClose.setText(_translate("MainWindow", "Close"))
@@ -71,3 +74,4 @@ class Ui_MainWindow(object):
         self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
         self.radNewCases.setText(_translate("MainWindow", "Daily new cases"))
         self.radNewDeaths.setText(_translate("MainWindow", "Daily new deaths"))
+        self.lblVersion.setText(_translate("MainWindow", "v0.10"))

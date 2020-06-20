@@ -17,7 +17,7 @@ class ChartFocus(Enum):
     DEATHS = 3
     NEW_DEATHS = 4
 
-
+APP_VERSION = "0.01.026"
 DATA_URL: str = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 LOCAL_DATA_FILE_NAME: str = r"data\covid19.csv"
 TARGET_FIPS_ID: float = 6059

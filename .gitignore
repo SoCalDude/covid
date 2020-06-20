@@ -156,6 +156,7 @@ cython_debug/
 personal/
 
 # covid project specific
+logs/
 chart/*
 !chart/screenshot-01.png
 !chart/screenshot-02.png
