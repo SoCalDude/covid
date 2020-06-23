@@ -162,7 +162,7 @@ chart/*
 !chart/screenshot-02.png
 !chart/screenshot-03.png
 data/*
-!data/.gitkeep
+!data/states.csv
 doc/*
 !doc/.gitkeep
 

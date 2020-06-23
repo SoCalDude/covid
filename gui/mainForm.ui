@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>227</height>
+    <width>459</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>160</y>
+      <y>262</y>
       <width>125</width>
       <height>20</height>
      </rect>
@@ -35,7 +35,7 @@
      <rect>
       <x>-1</x>
       <y>10</y>
-      <width>450</width>
+      <width>461</width>
       <height>31</height>
      </rect>
     </property>
@@ -55,7 +55,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>190</y>
+      <y>300</y>
       <width>75</width>
       <height>24</height>
      </rect>
@@ -68,7 +68,7 @@
     <property name="geometry">
      <rect>
       <x>350</x>
-      <y>190</y>
+      <y>300</y>
       <width>75</width>
       <height>24</height>
      </rect>
@@ -81,7 +81,7 @@
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>60</y>
+      <y>162</y>
       <width>181</width>
       <height>81</height>
      </rect>
@@ -119,17 +119,17 @@
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="grpMetric">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>60</y>
+      <y>162</y>
       <width>181</width>
       <height>81</height>
      </rect>
     </property>
     <property name="title">
-     <string>GroupBox</string>
+     <string>Chart Data</string>
     </property>
     <widget class="QRadioButton" name="radNewCases">
      <property name="geometry">
@@ -165,7 +165,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>208</y>
+      <y>310</y>
       <width>211</width>
       <height>10</height>
      </rect>
@@ -173,6 +173,68 @@
     <property name="text">
      <string>v0.10</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="grpLocation">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>60</y>
+      <width>401</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Location</string>
+    </property>
+    <widget class="QLabel" name="lblState">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>State:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="cboStates">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>161</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="currentText">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblCounty">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>20</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>County:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="cboCounties">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>40</y>
+       <width>161</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>

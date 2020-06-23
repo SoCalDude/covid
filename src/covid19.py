@@ -53,8 +53,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon(r"images/covid-image-120x123.png"))
         _translate = QtCore.QCoreApplication.translate
         self.lblVersion.setText(_translate("MainWindow", f"v{cfg.APP_VERSION}"))
-        self.setFixedSize(448, 227)
+        self.setFixedSize(459, 334)
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
+
+        self.cboStates.addItems(pd.read_csv(cfg.STATES_FILE_NAME, delimiter=None, encoding="mbcs"))
 
         # custom event handling (assigning slots)
         self.btnStart.clicked.connect(self.handleStartButton)
@@ -75,7 +77,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             launchOptions = {
                 "chartFocus": chartFocus,
                 "isFromServer": self.radServerData.isChecked(),
-                "saveChart": self.chkSavePlotImage.isChecked(),
+                "saveChart": self.chkSavePlotImage.isChecked()
             }
             launchCharting(launchOptions)
         except:
