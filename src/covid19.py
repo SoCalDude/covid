@@ -45,9 +45,17 @@ loggers = [loggerCon, loggerFile]
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    _dfStCo: pd.DataFrame = pd.DataFrame()
+
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        # MainWindow._dfStCo = pd.DataFrame()
+
+        # custom event handling (assigning slots)
+        self.cboStates.currentIndexChanged.connect(self.loadCountyData)  # state changed, so update the list of counties
+        self.btnStart.clicked.connect(self.handleStartButton)
+        self.btnClose.clicked.connect(self.handleCloseButton)
 
         # custom property settings
         self.setWindowIcon(QtGui.QIcon(r"images/covid-image-120x123.png"))
@@ -56,11 +64,61 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setFixedSize(459, 334)
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
 
-        self.cboStates.addItems(pd.read_csv(cfg.STATES_FILE_NAME, delimiter=None, encoding="mbcs"))
+        # load the states and their counties in a class-level dataframe
+        MainWindow._dfStCo = self.loadStateCountyData(cfg.LOCAL_DATA_FILE_NAME)
+        
+        # initialize the states combobox (dropdown listbox)
+        dfSt: pd.DataFrame = MainWindow._dfStCo.groupby(['state']).size().reset_index()["state"]  # ["state"] removes the aggregation column
+        self.cboStates.addItems(dfSt)
 
-        # custom event handling (assigning slots)
-        self.btnStart.clicked.connect(self.handleStartButton)
-        self.btnClose.clicked.connect(self.handleCloseButton)
+    def loadStateCountyData(self, localDataFile: str) -> pd.DataFrame:
+        pdRetVal: pd.DataFrame = pd.DataFrame()
+        try:
+            if os.path.exists(cfg.LOCAL_DATA_FILE_NAME):
+                pdRetVal = self.__loadLookupFromPreviousData(cfg.LOCAL_DATA_FILE_NAME)
+            else:
+                pdRetVal = self.__loadLookupFromStaticFile(cfg.LOCAL_STATES_COUNTIES_FILE_NAME)
+        except OSError as oserr:
+            utl.processLogMessage(
+                logging.ERROR, f"Unable to load lookup data: '{oserr}'", loggers,
+            )
+
+        return pdRetVal
+
+    def __loadLookupFromPreviousData(self, localPreviousDataFile: str) -> pd.DataFrame:
+        dfStCo: pd.DataFrame = pd.DataFrame()
+        try:
+            pdAll = pd.read_csv(localPreviousDataFile, delimiter=None, encoding="mbcs")
+            dfStCo = pdAll[['state','county']]
+        except Exception as ex:
+            utl.processLogMessage(
+                logging.ERROR, f"Unable to read local previous data, '{localPreviousDataFile}'. {ex.__doc__}", loggers,
+            )
+            raise OSError(f"Unable to read local previous data, '{localPreviousDataFile}'. {ex.__doc__}")
+        else:
+            dfStCo = self.__loadLookupFromStaticFile(cfg.LOCAL_STATES_COUNTIES_FILE_NAME)
+        
+        return dfStCo
+
+    def __loadLookupFromStaticFile(self, localStaticDataFile: str) -> pd.DataFrame:
+        dfStCo: pd.DataFrame = pd.DataFrame()
+        try:
+            dfStCo = pd.read_csv(cfg.LOCAL_DATA_FILE_NAME, delimiter=None, encoding="mbcs")
+        except Exception as ex:
+            utl.processLogMessage(
+                logging.ERROR, f"Unable to read local static data, '{cfg.LOCAL_DATA_FILE_NAME}'. {ex.__doc__}", loggers,
+            )
+            raise OSError(f"Unable to read local static data, '{cfg.LOCAL_DATA_FILE_NAME}'. {ex.__doc__}")
+
+        return dfStCo
+
+    # def loadCountyData(self, whichState: str) -> None:
+    def loadCountyData(self) -> None:
+        dfCo: pd.DataFrame = pd.DataFrame()
+        dfCo = MainWindow._dfStCo.groupby(['state', 'county']).size().reset_index()
+        dfCo = dfCo[dfCo["state"] == self.cboStates.currentText()]["county"]
+        self.cboCounties.clear()
+        self.cboCounties.addItems(dfCo)
 
     def handleStartButton(self) -> None:
         self.btnStart.setEnabled(False)
@@ -137,7 +195,7 @@ class Covid19:
         return retVal
 
     def getFilteredData(self, fipsID: float) -> pd.DataFrame:
-        dfOC: pd.DataFrame = None
+        dfFiltered: pd.DataFrame = None
 
         try:
             df = pd.read_csv(cfg.LOCAL_DATA_FILE_NAME, delimiter=None, encoding="mbcs")
@@ -146,12 +204,12 @@ class Covid19:
                 logging.ERROR, f"Unable to read local data, '{cfg.LOCAL_DATA_FILE_NAME}'. {ex.__doc__}", loggers,
             )
         else:
-            # filter just for the  requested fips value. When the dataframe was created,
+            # filter just for the requested fips value. When the dataframe was created,
             # fips was imported as a float64
-            dfOC = df[df.apply(lambda f: f["fips"] == fipsID, axis=1)]
-            dfOC = dfOC.drop(cfg.UNUSED_COLUMNS, axis=1)
+            dfFiltered = df[df.apply(lambda f: f["fips"] == fipsID, axis=1)]
+            dfFiltered = dfFiltered.drop(cfg.UNUSED_COLUMNS, axis=1)
 
-        return dfOC
+        return dfFiltered
 
     def addComputedColumns(self, df: pd.DataFrame) -> None:
         df["NewCases"] = df.cases - df.cases.shift()
@@ -260,18 +318,17 @@ def launchCharting(chartingOptions: dict) -> None:
         )
     else:
         utl.processLogMessage(logging.INFO, "Filtering data...", loggers)
-        dfOC = cvd.getFilteredData(cfg.TARGET_FIPS_ID)
+        dfCovidForCounty = cvd.getFilteredData(cfg.TARGET_FIPS_ID)
 
-        if not dfOC.empty:
+        if not dfCovidForCounty.empty:
             utl.processLogMessage(logging.INFO, "Computing daily deltas...", loggers)
-            cvd.addComputedColumns(dfOC)
+            cvd.addComputedColumns(dfCovidForCounty)
 
-            # dfOC fields (columns) are: date,county,state,fips,cases,deaths
+            # dfCovidForCounty fields (columns) are: date,county,state,fips,cases,deaths
             pd.set_option("display.max_rows", None)
-            utl.processLogMessage(logging.INFO, "\n" + str(dfOC.tail()), loggers)
+            utl.processLogMessage(logging.INFO, "\n" + str(dfCovidForCounty.tail()), loggers)
 
-            # cvd.showChart(dfOC, cfg.ChartFocus.NEW_CASES, chartingOptions["saveChart"])
-            cvd.showChart(dfOC, chartingOptions["chartFocus"], chartingOptions["saveChart"])
+            cvd.showChart(dfCovidForCounty, chartingOptions["chartFocus"], chartingOptions["saveChart"])
 
 
 def main() -> None:
