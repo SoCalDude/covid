@@ -72,43 +72,41 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cboStates.addItems(dfSt)
 
     def loadStateCountyData(self, localDataFile: str) -> pd.DataFrame:
-        pdRetVal: pd.DataFrame = pd.DataFrame()
+        dfRetVal: pd.DataFrame = pd.DataFrame()
         try:
             if os.path.exists(cfg.LOCAL_DATA_FILE_NAME):
-                pdRetVal = self.__loadLookupFromPreviousData(cfg.LOCAL_DATA_FILE_NAME)
+                dfRetVal = self.__loadLookupFromPreviousData(cfg.LOCAL_DATA_FILE_NAME)
             else:
-                pdRetVal = self.__loadLookupFromStaticFile(cfg.LOCAL_STATES_COUNTIES_FILE_NAME)
+                dfRetVal = self.__loadLookupFromStaticFile(cfg.LOCAL_STATES_COUNTIES_FILE_NAME)
         except OSError as oserr:
             utl.processLogMessage(
                 logging.ERROR, f"Unable to load lookup data: '{oserr}'", loggers,
             )
 
-        return pdRetVal
+        return dfRetVal
 
     def __loadLookupFromPreviousData(self, localPreviousDataFile: str) -> pd.DataFrame:
         dfStCo: pd.DataFrame = pd.DataFrame()
         try:
-            pdAll = pd.read_csv(localPreviousDataFile, delimiter=None, encoding="mbcs")
-            dfStCo = pdAll[["state", "county"]]
+            dfAll = pd.read_csv(localPreviousDataFile, delimiter=None, encoding="mbcs")
+            dfStCo = dfAll[["state", "county"]]
         except Exception as ex:
             utl.processLogMessage(
                 logging.ERROR, f"Unable to read local previous data, '{localPreviousDataFile}'. {ex.__doc__}", loggers,
             )
             raise OSError(f"Unable to read local previous data, '{localPreviousDataFile}'. {ex.__doc__}")
-        else:
-            dfStCo = self.__loadLookupFromStaticFile(cfg.LOCAL_STATES_COUNTIES_FILE_NAME)
 
         return dfStCo
 
     def __loadLookupFromStaticFile(self, localStaticDataFile: str) -> pd.DataFrame:
         dfStCo: pd.DataFrame = pd.DataFrame()
         try:
-            dfStCo = pd.read_csv(cfg.LOCAL_DATA_FILE_NAME, delimiter=None, encoding="mbcs")
+            dfStCo = pd.read_csv(cfg.LOCAL_STATES_COUNTIES_FILE_NAME, delimiter=None, encoding="mbcs")
         except Exception as ex:
             utl.processLogMessage(
-                logging.ERROR, f"Unable to read local static data, '{cfg.LOCAL_DATA_FILE_NAME}'. {ex.__doc__}", loggers,
+                logging.ERROR, f"Unable to read local static data, '{cfg.LOCAL_STATES_COUNTIES_FILE_NAME}'. {ex.__doc__}", loggers,
             )
-            raise OSError(f"Unable to read local static data, '{cfg.LOCAL_DATA_FILE_NAME}'. {ex.__doc__}")
+            raise OSError(f"Unable to read local static data, '{cfg.LOCAL_STATES_COUNTIES_FILE_NAME}'. {ex.__doc__}")
 
         return dfStCo
 
@@ -299,7 +297,12 @@ class Covid19:
         # if saving the chart is requested
         if saveChart:
             plt.savefig(
-                cfg.CHART_FILENAME.format(filename_desc, self.getFilenameTimestamp()), bbox_inches="tight",
+                cfg.CHART_FILENAME.format(
+                    filename_desc, 
+                    whichCounty.replace(" ", "-").lower(),
+                    whichState.replace(" ", "-").lower(),
+                    self.getFilenameTimestamp()), 
+                bbox_inches="tight"
             )
 
         # display chart

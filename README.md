@@ -59,17 +59,21 @@ This is the COVID-19 charting application for displaying a chart of daily new CO
 	
 	The naming convention of these saved charts is one of the following:
 	
-	    covid-19-new-cases-YYYY-MM-DD-HHmm.png
-	
-	    covid-19-new-deaths-YYYY-MM-DD-HHmm.png
+	>covid-19-new-cases-\{cntyname\}-county-\{stname\}-YYYY-MM-DD-HHmm.png
+	>
+	>covid-19-new-deaths-\{cntyname\}-county-\{stname\}-YYYY-MM-DD-HHmm.png
 	
 	where:
 	
-	    YYYY = four-digit year
+	    {cntyname} = county's name
+		{stname} = state's name
+		YYYY = four-digit year
 		MM = two-digit month
 		DD = two-digit day
 		HH = hour (24-hour clock)
 		mm = two-digit minutes
+		
+	_All date and time information is the date and time the chart was created and saved_
 6. Press the "Start" button to retrieve, process, and chart the data.
 
     _NOTE_: The choices and button on the main window are disabled when the chart is displayed. Closing the chart reenables the main window of the application.
