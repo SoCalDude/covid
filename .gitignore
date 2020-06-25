@@ -162,8 +162,5 @@ chart/*
 !chart/screenshot-02.png
 !chart/screenshot-03.png
 data/*
-!data/states.csv
 !data/states-counties.csv
 doc/*
-!doc/.gitkeep
-
