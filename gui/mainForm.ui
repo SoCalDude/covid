@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Orange Co. COVID-19 Charting</string>
+   <string>County COVID-19 Charting</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QCheckBox" name="chkSavePlotImage">

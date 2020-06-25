@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Orange Co. COVID-19 Charting"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "County COVID-19 Charting"))
         self.chkSavePlotImage.setText(_translate("MainWindow", "Save chart image"))
         self.lblTitle.setText(_translate("MainWindow", "County COVID-19 Charting"))
         self.btnStart.setText(_translate("MainWindow", "Start"))

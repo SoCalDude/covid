@@ -30,7 +30,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 # import mainFormConfig as formCfg
 from src.mainForm import Ui_MainWindow
 
-
 # endregion
 
 # region setup the two loggers (one for console and one for rotating file)
@@ -45,12 +44,13 @@ loggers = [loggerCon, loggerFile]
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    # class-level variable(s)
     _dfStCo: pd.DataFrame = pd.DataFrame()
 
+    # ctor
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
-        # MainWindow._dfStCo = pd.DataFrame()
 
         # custom event handling (assigning slots)
         self.cboStates.currentIndexChanged.connect(self.loadCountyData)  # state changed, so update the list of counties
@@ -66,9 +66,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # load the states and their counties in a class-level dataframe
         MainWindow._dfStCo = self.loadStateCountyData(cfg.LOCAL_DATA_FILE_NAME)
-        
+
         # initialize the states combobox (dropdown listbox)
-        dfSt: pd.DataFrame = MainWindow._dfStCo.groupby(['state']).size().reset_index()["state"]  # ["state"] removes the aggregation column
+        dfSt: pd.DataFrame = MainWindow._dfStCo.groupby(["state"]).size().reset_index()["state"]
         self.cboStates.addItems(dfSt)
 
     def loadStateCountyData(self, localDataFile: str) -> pd.DataFrame:
@@ -89,7 +89,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         dfStCo: pd.DataFrame = pd.DataFrame()
         try:
             pdAll = pd.read_csv(localPreviousDataFile, delimiter=None, encoding="mbcs")
-            dfStCo = pdAll[['state','county']]
+            dfStCo = pdAll[["state", "county"]]
         except Exception as ex:
             utl.processLogMessage(
                 logging.ERROR, f"Unable to read local previous data, '{localPreviousDataFile}'. {ex.__doc__}", loggers,
@@ -97,7 +97,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             raise OSError(f"Unable to read local previous data, '{localPreviousDataFile}'. {ex.__doc__}")
         else:
             dfStCo = self.__loadLookupFromStaticFile(cfg.LOCAL_STATES_COUNTIES_FILE_NAME)
-        
+
         return dfStCo
 
     def __loadLookupFromStaticFile(self, localStaticDataFile: str) -> pd.DataFrame:
@@ -112,10 +112,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         return dfStCo
 
-    # def loadCountyData(self, whichState: str) -> None:
     def loadCountyData(self) -> None:
         dfCo: pd.DataFrame = pd.DataFrame()
-        dfCo = MainWindow._dfStCo.groupby(['state', 'county']).size().reset_index()
+        dfCo = MainWindow._dfStCo.groupby(["state", "county"]).size().reset_index()
         dfCo = dfCo[dfCo["state"] == self.cboStates.currentText()]["county"]
         self.cboCounties.clear()
         self.cboCounties.addItems(dfCo)
@@ -123,10 +122,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def handleStartButton(self) -> None:
         self.btnStart.setEnabled(False)
         self.btnClose.setEnabled(False)
+        self.cboStates.setEnabled(False)
+        self.cboCounties.setEnabled(False)
+        self.grpDataSource.setEnabled(False)
+        self.grpMetric.setEnabled(False)
+        self.chkSavePlotImage.setEnabled(False)
+
         chartFocus: cfg.ChartFocus = cfg.ChartFocus.NEW_CASES
-
         try:
-
             if self.radNewCases.isChecked():
                 chartFocus = cfg.ChartFocus.NEW_CASES
             elif self.radNewDeaths.isChecked():
@@ -135,7 +138,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             launchOptions = {
                 "chartFocus": chartFocus,
                 "isFromServer": self.radServerData.isChecked(),
-                "saveChart": self.chkSavePlotImage.isChecked()
+                "saveChart": self.chkSavePlotImage.isChecked(),
+                "state": self.cboStates.currentText(),
+                "county": self.cboCounties.currentText(),
             }
             launchCharting(launchOptions)
         except:
@@ -144,12 +149,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         finally:
             self.btnStart.setEnabled(True)
             self.btnClose.setEnabled(True)
+            self.cboStates.setEnabled(True)
+            self.cboCounties.setEnabled(True)
+            self.grpDataSource.setEnabled(True)
+            self.grpMetric.setEnabled(True)
+            self.chkSavePlotImage.setEnabled(True)
 
     def handleCloseButton(self):
         self.close()
 
 
 class Covid19:
+    # ctor
     def __init__(self):
         pass
 
@@ -180,10 +191,6 @@ class Covid19:
             # make a copy of the old file and create the new one
             if retVal and wasRemoteCallSuccessful:
                 try:
-                    if os.path.exists(cfg.LOCAL_DATA_FILE_NAME):
-                        pass
-                        # xshutil.copy(cfg.LOCAL_DATA_FILE_NAME, cfg.LOCAL_DATA_FILE_NAME + ".prev")
-
                     with open(cfg.LOCAL_DATA_FILE_NAME, "w") as f:
                         f.write(csv.text)
                 except Exception as ex:
@@ -194,7 +201,7 @@ class Covid19:
 
         return retVal
 
-    def getFilteredData(self, fipsID: float) -> pd.DataFrame:
+    def getFilteredData(self, whichState: str, whichCounty: str) -> pd.DataFrame:
         dfFiltered: pd.DataFrame = None
 
         try:
@@ -206,7 +213,7 @@ class Covid19:
         else:
             # filter just for the requested fips value. When the dataframe was created,
             # fips was imported as a float64
-            dfFiltered = df[df.apply(lambda f: f["fips"] == fipsID, axis=1)]
+            dfFiltered = df[df.apply(lambda f: f["state"] == whichState and f["county"] == whichCounty, axis=1)]
             dfFiltered = dfFiltered.drop(cfg.UNUSED_COLUMNS, axis=1)
 
         return dfFiltered
@@ -251,7 +258,7 @@ class Covid19:
     def getFilenameTimestamp(self) -> str:
         return datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
 
-    def showChart(self, df: pd.DataFrame, whichMetric: cfg.ChartFocus, saveChart: bool) -> None:
+    def showChart(self, df: pd.DataFrame, whichMetric: cfg.ChartFocus, whichCounty: str, whichState: str, saveChart: bool) -> None:
         yAxis: str = ""
         yLabel: str = ""
         filename_desc: str = ""
@@ -267,7 +274,7 @@ class Covid19:
             yLabel = "Deaths per Day"
             filename_desc = "new-deaths"
 
-        plt.figure(figsize=(10, 5))
+        plt.figure(figsize=(10, 6), dpi=120)
         # Add main data to the graph
         plt.plot(df[yAxis], label=yLabel)
         # Add the moving average to the graph
@@ -279,13 +286,11 @@ class Covid19:
         plt.xticks(np.arange(0, len(df.index), self.reduceTicks(len(df.index), cfg.TICK_REDUCTION_FACTOR),))
 
         # set the graph's other appearance properties
-
         plt.title(
-            "Orange Co. Covid-19\n(from {} to {}, inclusive)".format(
-                self.getTitleDate(df.index[0]), self.getTitleDate(df.index[len(df.index) - 1]),
+            "Covid-19\n{} County, {}\n(from {} to {}, inclusive)".format(
+                whichCounty, whichState, self.getTitleDate(df.index[0]), self.getTitleDate(df.index[len(df.index) - 1]),
             )
         )
-
         plt.xticks(fontsize=7, rotation=45, ha="right")
         plt.grid(axis="x", which="major", color="#E5E5E5", linestyle="dotted")
         plt.grid(axis="y", which="major", color="#E5E5E5", linestyle="solid")
@@ -305,7 +310,7 @@ def launchCharting(chartingOptions: dict) -> None:
     cvd = Covid19()
     useServerData = chartingOptions["isFromServer"]
 
-    utl.processLogMessage(logging.INFO, f"Selected data: {cfg.ChartFocus(chartingOptions['chartFocus']).name}", loggers)
+    utl.processLogMessage(logging.INFO, f"Selected data for {chartingOptions['county']} County, {chartingOptions['state']}: {cfg.ChartFocus(chartingOptions['chartFocus']).name}", loggers)
 
     # this was chosen by the user in the GUI if they want fresh data or not
     utl.processLogMessage(
@@ -318,7 +323,7 @@ def launchCharting(chartingOptions: dict) -> None:
         )
     else:
         utl.processLogMessage(logging.INFO, "Filtering data...", loggers)
-        dfCovidForCounty = cvd.getFilteredData(cfg.TARGET_FIPS_ID)
+        dfCovidForCounty = cvd.getFilteredData(chartingOptions["state"], chartingOptions["county"])
 
         if not dfCovidForCounty.empty:
             utl.processLogMessage(logging.INFO, "Computing daily deltas...", loggers)
@@ -328,7 +333,13 @@ def launchCharting(chartingOptions: dict) -> None:
             pd.set_option("display.max_rows", None)
             utl.processLogMessage(logging.INFO, "\n" + str(dfCovidForCounty.tail()), loggers)
 
-            cvd.showChart(dfCovidForCounty, chartingOptions["chartFocus"], chartingOptions["saveChart"])
+            cvd.showChart(
+                dfCovidForCounty,
+                chartingOptions["chartFocus"],
+                chartingOptions["county"],
+                chartingOptions["state"],
+                chartingOptions["saveChart"],
+            )
 
 
 def main() -> None:
