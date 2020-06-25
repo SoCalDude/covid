@@ -7,11 +7,8 @@
 
 ![COVID-19 New Cases Screenshot](https://github.com/SoCalDude/covid/blob/master/images/screenshot-01.png)
 
-This is the COVID-19 charting application for displaying a chart of daily new COVID-19 cases (or daily COVID-19 deaths) for a particular county.
+This is the COVID-19 charting application for displaying a chart of daily new COVID-19 cases (or daily COVID-19 deaths) for a particular county in the United States.
 
-Currently, the data only shows for Orange County, California. The ability to choose any county from any state is forthcoming (in [<ins>Issue #4</ins>](https://github.com/SoCalDude/covid/issues/4))
-
-For the time being, if you wish to show a different county, please refer to the **Manual County Selection** section below. 
 
 **Requirements**
 
@@ -32,9 +29,52 @@ For the time being, if you wish to show a different county, please refer to the 
 2. Run the main Python script from the _src_ folder:
     <br><pre>covid19oc.py</pre>
 <br><br>
+
+**The Main Window**
+
 ![COVID-19 Main Window Screenshot](https://github.com/SoCalDude/covid/blob/master/images/screenshot-03.png)
 <br><br>
 
-**Manual County Selection**
-<br><br>
-Until the user-selectable state and county feature is implemented ([<ins>Issue #4</ins>](https://github.com/SoCalDude/covid/issues/4)), you may manually change the setting for your desired county. Please review the [<ins>raw data file</ins>](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv) and search for your county. Once you have located an entry for your county, take note of the county ID. It is in the third logical position (fourth physical position) in the data line. This is also known as the _FIPS_ ID. Replace the value of the constant, TARGET_FIPS_ID, with this FIPS ID (leading zero is not necessary) in the file: <pre>src/config.py</pre>
+1. Choose a state from the drop-down list of states.
+
+    These are populated with each state of the United States, along with U.S. territories.
+2. Choose a county from the drop-down list of counties.
+
+    The counties are populated based on the currently selected state.
+3. Choose what metric you would like charted.
+
+    Your choices are "daily new cases" or "daily new deaths"
+4. Choose your source of the data.
+
+    - Select "internet" if you want the latest data.
+	
+	_NOTE_: This is mandatory if this is the first time the application has not run.
+	
+	- Select "local previous data" if you want to rerun the charting on the same day it has been run before. 
+	
+	The internet data is only updated once a day, so using local previous data is faster for subsequent charting on the same day.
+5. Indicate whether the chart image is automatically saved once it is displayed on the screen.
+
+    The chart is saved in the subfolder named "chart" under the main application folder. 
+	
+	The naming convention of these saved charts is one of the following:
+	
+	    covid-19-new-cases-YYYY-MM-DD-HHmm.png
+	
+	    covid-19-new-deaths-YYYY-MM-DD-HHmm.png
+	
+	where:
+	
+	    YYYY = four-digit year
+		MM = two-digit month
+		DD = two-digit day
+		HH = hour (24-hour clock)
+		mm = two-digit minutes
+6. Press the "Start" button to retrieve, process, and chart the data.
+
+    _NOTE_: The choices and button on the main window are disabled when the chart is displayed. Closing the chart reenables the main window of the application.
+	
+	![COVID-19 New Deaths Screenshot](https://github.com/SoCalDude/covid/blob/master/images/screenshot-04.png)
+7. Press the "Close" button to exit the application.
+
+
