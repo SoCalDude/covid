@@ -24,3 +24,4 @@ LOCAL_STATES_COUNTIES_FILE_NAME: str = r"data\states-counties.csv"
 UNUSED_COLUMNS: list = ["county", "state", "fips"]
 TICK_REDUCTION_FACTOR: float = 0.98
 CHART_FILENAME: str = r".\chart\covid-19-{}-{}-county-{}-{}.png"
+ROLLING_AVG_INTERVAL_DAYS: int = 7

@@ -226,8 +226,8 @@ class Covid19:
         df.loc[df.index[0], "NewDeaths"] = df.loc[df.index[0], "deaths"]
 
         # Rolling average
-        df["SMAc"] = df["NewCases"].rolling(14).mean()
-        df["SMAd"] = df["NewDeaths"].rolling(14).mean()
+        df["SMAc"] = df["NewCases"].rolling(cfg.ROLLING_AVG_INTERVAL_DAYS).mean()
+        df["SMAd"] = df["NewDeaths"].rolling(cfg.ROLLING_AVG_INTERVAL_DAYS).mean()
         return
 
     def reduceTicks(self, tickCount: int, percentReduction: float) -> int:
@@ -277,7 +277,7 @@ class Covid19:
         plt.plot(df[yAxis], label=yLabel)
         # Add the moving average to the graph
         plt.plot(
-            (df.SMAc if whichMetric == cfg.ChartFocus.NEW_CASES else df.SMAd), label="14-Day Moving Avg",
+            (df.SMAc if whichMetric == cfg.ChartFocus.NEW_CASES else df.SMAd), label=(str(cfg.ROLLING_AVG_INTERVAL_DAYS) + "-Day Moving Avg"),
         )
 
         # show every x ticks
